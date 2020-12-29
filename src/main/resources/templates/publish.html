@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Music Community</title>
+    <title>发布 - Music Community</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" rel="stylesheet"/>
@@ -18,7 +18,7 @@
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Music Community</span>
             </button>
-            <a class="navbar-brand" href="#">Music Community</a>
+            <a class="navbar-brand" href="/">Music Community</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -30,9 +30,7 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${session.user!=null}">
-                    <a href="/publish">发布</a>
-                </li>
+
                 <li class="dropdown" th:if="${session.user!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false" th:text="${session.user.getName()}"><span class="caret"></span></a>
@@ -48,36 +46,52 @@
             </ul>
         </div>
     </div>
+
 </nav>
 
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span> 发现</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 发起</h2>
             <hr/>
 
-            <div class="media" th:each="question:${questions}">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="img-circle media-object" th:width="40px" th:src="${question.user.getAvatar_url}">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
-                    <span th:text="${question.description}"></span><br>
-                    <span class="info">
-                        <span th:text="${question.comment_count}"></span>个回复 ·
-                        <span th:text="${question.view_count}"></span>次浏览 ·
-                        <span th:text="${#dates.format(question.gmt_create, 'dd MMMM yyyy')}"></span>
-                    </span>
-                </div>
-            </div>
+            <form action="/publish" method="post">
 
+                <div class="form-group">
+                    <label for="title">问题标题</label>
+                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题..." th:value="${title}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">问题补充</label>
+                    <textarea name="description" class="form-control" id="description" cols = "30" rows = "10" th:text="${description}"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="tag">添加标签</label>
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以逗号分隔" th:value="${tag}"/>
+                </div>
+
+                <div class="container-fluid main">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" th:text="${error}"></div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                            <button type="submit" class="btn btn-success btn-publish">
+                                发布
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
 
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门话题</h3>
-
+            <h3>问题发起指南</h3>
+            <p>问题标题</p>
+            <p>问题补充</p>
+            <p>选择标题</p>
         </div>
     </div>
 </div>
