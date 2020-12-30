@@ -33,7 +33,6 @@ public class QuestionService {
         List<Question> questions = questionMapper.list(offset, size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
-
         for(Question question:questions)
         {
             User user = userMapper.findById(question.getCreator());
@@ -42,11 +41,8 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOS.add(questionDTO);
         }
-
         paginationDTO.setQuestions(questionDTOS);
-
         return paginationDTO;
-
     }
 
     public PaginationDTO list(String id, Integer page, Integer size) {
@@ -60,10 +56,9 @@ public class QuestionService {
         List<Question> questions = questionMapper.listByUserId(id, offset, size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
 
-
         for(Question question:questions)
         {
-            User user = userMapper.findById(question.getId());
+            User user = userMapper.findById(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -71,8 +66,31 @@ public class QuestionService {
         }
 
         paginationDTO.setQuestions(questionDTOS);
-
         return paginationDTO;
+    }
+
+    public QuestionDTO getById(Integer id) {
+        Question question = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        User user = userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
+    }
+
+    public void createOrUpdate(Question question) {
+
+        if(question.getId()==null)
+        {
+            question.setGmt_create(System.currentTimeMillis());
+            question.setGmt_modified(question.getGmt_create());
+            questionMapper.create(question);
+        }
+        else
+        {
+            question.setGmt_modified(System.currentTimeMillis());
+            questionMapper.update(question);
+        }
 
     }
 }

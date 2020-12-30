@@ -1,7 +1,6 @@
 package amazing.community.controller;
 
 import amazing.community.dto.PaginationDTO;
-import amazing.community.mapper.QuestionMapper;
 import amazing.community.model.User;
 import amazing.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
