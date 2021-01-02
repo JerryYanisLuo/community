@@ -2,12 +2,16 @@ package amazing.community.service;
 
 import amazing.community.dto.CommentDTO;
 import amazing.community.enums.CommentTypeEnum;
+import amazing.community.enums.NotificationEnum;
+import amazing.community.enums.NotificationStatusEnum;
 import amazing.community.exception.CustomizeErrorCodeImpl;
 import amazing.community.exception.CustomizeException;
 import amazing.community.mapper.CommentMapper;
+import amazing.community.mapper.NotificationMapper;
 import amazing.community.mapper.QuestionMapper;
 import amazing.community.mapper.UserMapper;
 import amazing.community.model.Comment;
+import amazing.community.model.Notification;
 import amazing.community.model.Question;
 import amazing.community.model.User;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +34,9 @@ public class CommentService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Transactional
     public void insert(Comment comment) {
 
@@ -39,11 +46,18 @@ public class CommentService {
 
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
             //回复评论
-            Comment parent = commentMapper.getById(comment.getParent_id());
+            Comment parent = commentMapper.getById(comment.getReply());
             if (parent == null) {
                 throw new CustomizeException(CustomizeErrorCodeImpl.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+
+            if(comment.getPoster()!=parent.getPoster())
+            {
+                Notification notification = createNotify(comment, parent.getPoster(), NotificationEnum.REPLY_COMMENT.getType());
+                notificationMapper.insert(notification);
+            }
+
         } else if (comment.getType() == CommentTypeEnum.QUESTION.getType()) {
             //回复问题
             Question question = questionMapper.getById(comment.getParent_id());
@@ -52,10 +66,28 @@ public class CommentService {
             }
             commentMapper.insert(comment);
             questionMapper.incComm(question);
+
+            if(comment.getPoster()!=question.getCreator())
+            {
+                Notification notification = createNotify(comment, question.getCreator(), NotificationEnum.REPLY_QUESTION.getType());
+                notificationMapper.insert(notification);
+            }
+
         } else {
             //评论类型错误
             throw new CustomizeException(CustomizeErrorCodeImpl.TYPE_PARAM_WRONG);
         }
+    }
+
+    private Notification createNotify(Comment comment, Integer receiver, Integer type) {
+        Notification notification = new Notification();
+        notification.setGmt_create(System.currentTimeMillis());
+        notification.setType(type);
+        notification.setOuter_id(comment.getParent_id());
+        notification.setNotifier(comment.getPoster());
+        notification.setReceiver(receiver);
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        return notification;
     }
 
 
@@ -79,7 +111,7 @@ public class CommentService {
                 User p = null;
                 BeanUtils.copyProperties(ch,cDTO);
                 cDTO.setUser(u);
-                if(ch.getReply()!=null || ch.getReply()==ch.getParent_id())
+                if(ch.getReply()!=null && ch.getReply()!=ch.getParent_id())
                 {
                     Comment c = commentMapper.getById(ch.getReply());
                     p = userMapper.findById(c.getPoster());

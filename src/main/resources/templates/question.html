@@ -23,7 +23,7 @@
                 <h2><span th:text="${question.title}"></span></h2>
                 <span class="info">
                     <span th:text="${question.user.name}"></span>&emsp;
-                    <span th:text="${#dates.format(question.gmt_create, 'yyyy-MM-dd')}"></span>&emsp;
+                    <span th:text="${#dates.format(question.getGmt_modified(), 'yyyy-MM-dd')}"></span>&emsp;
                     <span th:text="${question.view_count}"></span>阅读&emsp;
                     <a class="community-menu" th:href="@{'/publish/'+${question.id}}"
                        th:if="${session.user!=null && session.user.id==question.creator}">
@@ -83,7 +83,7 @@
                     <div class="media-left">
                         <a href="#">
                             <img class="img-circle media-object" th:width="60px" style="margin-right: 20px;"
-                                 th:src="${question.user.avatar_url}">
+                                 th:src="${comment.user.avatar_url}">
                         </a>
                     </div>
 
@@ -95,7 +95,7 @@
                             <span th:text="${#dates.format(comment.gmt_create, 'yyyy-MM-dd HH:mm')}"></span>&emsp;
                             <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"
                                   th:text="${' '+comment.like_count}"></span>&emsp;
-                            <span class="icon" th:reply="${comment.reply}" th:data-id="${comment.id}" onclick="subReply(this)">回复</span>
+                            <span class="icon" th:reply="${comment.id}" th:data-id="${comment.id}" onclick="subReply(this)">回复</span>
                         </span>
 
                         <!--二级评论-->
@@ -107,7 +107,7 @@
                                      th:src="${comm.user.avatar_url}">
                             </div>
 
-                            <div class="media-body">
+                            <div class="media-body" th:name="${comm.id}">
                                 <div>
                                     <span th:text="${comm.user.name}"></span>&emsp;
                                     <span th:if="${comm.parent != null}">@<span th:text="${comm.parent.name}"></span>&emsp;</span>

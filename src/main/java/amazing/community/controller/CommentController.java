@@ -24,7 +24,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object postFirstLevelComment(@RequestBody CommentCreateDTO commentCreateDTO,
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {

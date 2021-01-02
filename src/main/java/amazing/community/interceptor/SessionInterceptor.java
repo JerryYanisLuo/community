@@ -1,5 +1,6 @@
 package amazing.community.interceptor;
 
+import amazing.community.mapper.NotificationMapper;
 import amazing.community.mapper.UserMapper;
 import amazing.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -30,6 +34,10 @@ public class SessionInterceptor implements HandlerInterceptor {
                 User user = userMapper.findByToken(token);
                 if(user!=null) {
                     request.getSession().setAttribute("user", user);
+
+                    int messageCount = notificationMapper.countMessage(user);
+                    request.getSession().setAttribute("messageCount",messageCount);
+
                 }
                 break;
             }

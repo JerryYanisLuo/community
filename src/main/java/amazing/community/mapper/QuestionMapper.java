@@ -37,4 +37,5 @@ public interface QuestionMapper {
 
     @Select("select * from question where tag regexp #{r} and id!=#{id}")
     List<Question> getRecQuest(@Param(value = "r") String reg, @Param(value = "id") Integer id);
+
 }

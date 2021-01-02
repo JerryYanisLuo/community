@@ -99,3 +99,13 @@ function postSub()
         dataType: "json"
     });
 }
+
+
+function jump(e)
+{
+    var id =  e.getAttribute("commid");
+    location.href = $("#{id}");
+    console.log("jump");
+}
+
+
