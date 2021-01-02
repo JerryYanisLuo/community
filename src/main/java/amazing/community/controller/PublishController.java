@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Controller
 public class PublishController {
@@ -58,15 +60,15 @@ public class PublishController {
             return "publish";
         }
 
-        if (title == null || title == "") {
+        if (title == null || title.equals("")) {
             model.addAttribute("error", "标题不能为空");
             return "publish";
         }
-        if (description == null || description == "") {
+        if (description == null || description.equals("")) {
             model.addAttribute("error", "描述不能为空");
             return "publish";
         }
-        if (tag == null || tag == "") {
+        if (tag == null || tag.equals("")) {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
@@ -74,7 +76,7 @@ public class PublishController {
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
-        question.setTag(tag);
+        question.setTag(Arrays.stream(tag.split("\\s+")).collect(Collectors.joining(" ")));
         question.setCreator(user.getId());
         question.setId(id);
         questionService.createOrUpdate(question);

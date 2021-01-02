@@ -6,7 +6,7 @@ body
 .main
 {
     background-color: white;
-    margin: 30px;
+    margin: 20px 200px;
 }
 
 .btn-publish{
@@ -25,4 +25,9 @@ body
 {
     color: #999999;
     font-size: 13px;
+}
+
+.icon
+{
+    cursor: pointer;
 }

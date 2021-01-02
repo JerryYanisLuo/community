@@ -27,5 +27,14 @@ public interface QuestionMapper {
     Question getById(Integer id);
 
     @Update("update question set title=#{title}, description=#{description}, gmt_modified=#{gmt_modified}, tag=#{tag} where id = #{id}")
-    void update(Question question);
+    Integer update(Question question);
+
+    @Update("update question set view_count = view_count+1 where id=#{id}")
+    Integer incView(@Param(value = "id") Integer id);
+
+    @Update("update question set comment_count=comment_count+1 where id=#{id}")
+    void incComm(Question question);
+
+    @Select("select * from question where tag regexp #{r} and id!=#{id}")
+    List<Question> getRecQuest(@Param(value = "r") String reg, @Param(value = "id") Integer id);
 }
