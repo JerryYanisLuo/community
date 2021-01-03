@@ -21,7 +21,7 @@ public class NotificationHelpController {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) return "redirect:/";
 
-        String[] info = infos.split("_");
+        String[] info = infos.split("&");
         int id = Integer.parseInt(info[0]);
         String quest = info[1];
         notificationService.read(id);

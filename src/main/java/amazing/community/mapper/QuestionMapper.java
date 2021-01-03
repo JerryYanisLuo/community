@@ -1,6 +1,7 @@
 package amazing.community.mapper;
 
 import amazing.community.model.Question;
+import amazing.community.model.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -38,4 +39,6 @@ public interface QuestionMapper {
     @Select("select * from question where tag regexp #{r} and id!=#{id}")
     List<Question> getRecQuest(@Param(value = "r") String reg, @Param(value = "id") Integer id);
 
+    @Select("select id from question where creator = #{id} order by gmt_create desc limit 0,1")
+    Integer findLatestQuest(User user);
 }

@@ -5,6 +5,7 @@ import amazing.community.dto.QuestionDTO;
 import amazing.community.exception.CustomizeErrorCodeImpl;
 import amazing.community.exception.CustomizeException;
 import amazing.community.mapper.QuestionMapper;
+import amazing.community.mapper.SearchMapper;
 import amazing.community.mapper.UserMapper;
 import amazing.community.model.Question;
 import amazing.community.model.User;
@@ -25,6 +26,9 @@ public class QuestionService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private SearchMapper searchMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
 
@@ -111,5 +115,35 @@ public class QuestionService {
 
         List<Question> questions = questionMapper.getRecQuest(reg, questionDTO.getId());
         return questions;
+    }
+
+    public PaginationDTO search(String name, Integer page, Integer size) {
+
+        PaginationDTO paginationDTO = new PaginationDTO();
+        Integer totalCount = searchMapper.count(name);
+        if (page < 0 || page > (totalCount + size - 1) / size) page = 1;
+        paginationDTO.setPagination(totalCount, page, size);
+
+        Integer offset = size * (page - 1);
+        List<Question> questions = searchMapper.searchQuestionByName(name, offset, size);
+        List<QuestionDTO> questionDTOS = new ArrayList<>();
+
+        for (Question question : questions) {
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question, questionDTO);
+            questionDTO.setUser(user);
+            questionDTOS.add(questionDTO);
+        }
+        paginationDTO.setQuestions(questionDTOS);
+        return paginationDTO;
+
+
+    }
+
+    public Integer findLatestQuest(User user) {
+
+        return questionMapper.findLatestQuest(user);
+
     }
 }

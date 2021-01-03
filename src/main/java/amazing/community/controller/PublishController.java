@@ -24,8 +24,7 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Integer id,
-                       Model model)
-    {
+                       Model model) {
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
@@ -80,6 +79,9 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setId(id);
         questionService.createOrUpdate(question);
-        return "redirect:/";
+        if (id == null) {
+            id = questionService.findLatestQuest(user);
+        }
+        return "redirect:/question/" + id;
     }
 }
