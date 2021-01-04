@@ -6,8 +6,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/community.css"/>
+    <link rel="stylesheet" href="/css/editormd.css"/>
+    <link rel="stylesheet" href="/css/editormd.preview.css"/>
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="/js/editormd.min.js" type="text/javascript"></script>
+    <script src="/js/editormd.js" type="text/javascript"></script>
+    <script src="/lib/marked.min.js"></script>
+    <script src="/lib/prettify.min.js"></script>
+    <link rel="icon" type="image/x-icon" href="/images/high.png" />
 </head>
 <body>
 
@@ -15,52 +23,85 @@
 
 <div class="container-fluid main">
     <div class="row">
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 发起</h2>
             <hr/>
 
-            <form action="/publish" method="post">
-
+            <form action="/publish" method="post" onsubmit="return check();">
                 <input type="hidden" name="id" th:value="${id}"/>
-
                 <div class="form-group">
-                    <label for="title">问题标题</label>
-                    <input type="text" class="form-control" id="title" name="title" placeholder="问题标题..."
-                           th:value="${title}" autocomplete="off"/>
-                </div>
-
-                <div class="form-group">
-                    <label for="description">问题补充</label>
-                    <textarea name="description" class="form-control" id="description" cols="30" rows="10"
-                              th:text="${description}"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="tag">添加标签</label>
-                    <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以空格分隔"
-                           th:value="${tag}" autocomplete="off"/>
-                </div>
-
-                <div class="container-fluid main">
-                    <div class="row">
-                        <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" th:text="${error}"></div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <button type="submit" class="btn btn-success btn-publish">
-                                发布
-                            </button>
+                    <div class="media">
+                        <div class="media-left media-middle" style="width: 500px">
+                            <label for="title">文章标题</label>
                         </div>
 
+                        <div class="media-body" style="vertical-align: middle;">
+                            <input type="text" class="form-control" id="title" name="title" placeholder="文章标题..."
+                                   th:value="${title}" autocomplete="off"/>
+                        </div>
+
+                        <div class="media-right" style="vertical-align: middle;">
+                            <button type="submit" class="btn btn-success btn-publish" style="margin-bottom: 0;">
+                                发布
+                            </button>
+                            <script>
+                                function check() {
+                                    var title = $("#title").val();
+                                    var description = $("#description").val();
+                                    var tag = $("#tag").val();
+
+                                    if (title == "") {
+                                        alert("标题不为空");
+                                        return false;
+                                    } else if (description == "") {
+                                        alert("内容不为空");
+                                        return false;
+                                    } else if (tag == "") {
+                                        alert("标签不为空");
+                                        return false;
+                                    } else {
+                                        return true;
+                                    }
+                                }
+                            </script>
+                        </div>
                     </div>
                 </div>
 
-            </form>
 
-        </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>问题发起指南</h3>
-            <p>问题标题</p>
-            <p>问题补充</p>
-            <p>选择标题</p>
+                <div class="media" style="margin-bottom: 20px">
+                    <div class="media-left media-middle" style="width: 500px">
+                        <label for="tag">文章标签</label>
+                    </div>
+
+                    <div class="media-body" style="vertical-align: middle;">
+                        <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以空格分隔"
+                               th:value="${tag}" autocomplete="off"/>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <!--                    <label for="description">问题补充</label>-->
+                    <div id="test-editor">
+                        <textarea name="description" class="form-control" id="description" cols="30" rows="10"
+                                  th:text="${description}" style="display:none;resize: none;">
+                        </textarea>
+                    </div>
+                    <script type="text/javascript">
+                        $(function () {
+                            var editor = editormd("test-editor", {
+                                width: "100%",
+                                height: 400,
+                                path: "/lib/",
+                                delay: 0,
+                                watch: false,
+                                placeholder: "欢迎使用Markdown编辑器!"
+                            });
+                        });
+                    </script>
+                </div>
+            </form>
         </div>
     </div>
 </div>

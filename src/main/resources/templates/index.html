@@ -8,6 +8,8 @@
     <link rel = "stylesheet" href="css/community.css"/>
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+    <link rel="icon" type="image/x-icon" href="/images/high.png"/>
 </head>
 
 <script type="application/javascript">
@@ -44,7 +46,8 @@
                     <h4 class="media-heading">
                         <a th:href="@{'question/'+${question.id}}" th:text="${question.title}"></a>
                     </h4>
-                    <span th:text="${question.description}"></span><br>
+                    <span th:text="${question.description.substring(0, (question.description.length()>40?40:question.description.length()))+(question.description.length()>40?'...':'')}"></span><br>
+
                     <span class="info">
                         <span th:text="${question.comment_count}"></span>个回复 ·
                         <span th:text="${question.view_count}"></span>次浏览 ·
@@ -88,7 +91,7 @@
 
         </div>
         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门话题</h3>
+            <h3>热门文章</h3>
             <div th:each="topic : ${hotTopics}">
                 <a th:href="@{'/question/'+${topic.id}}" th:text="${topic.title}"></a>
             </div>

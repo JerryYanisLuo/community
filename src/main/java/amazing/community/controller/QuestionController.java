@@ -31,14 +31,15 @@ public class QuestionController {
                             HttpServletRequest request) {
 
         User user = (User) request.getSession().getAttribute("user");
-        String name = user==null?"guestView":("view"+user.getId());
-        HashSet<Integer> view = (HashSet<Integer>) request.getSession().getAttribute(name);
+//        String name = user==null?"guestView":("view"+user.getId());
+        HashSet<Integer> view = (HashSet<Integer>) request.getSession().getAttribute("view");
+//        HashSet<Integer> guestview = (HashSet<Integer>) request.getSession().getAttribute("guestView");
         if(view==null || !view.contains(id))
         {
             questionService.incView(id);//累加浏览数
             if(view==null) view = new HashSet<>();
             view.add(id);
-            request.getSession().setAttribute(name, view);
+            request.getSession().setAttribute("view", view);
         }
 
         QuestionDTO questionDTO = questionService.getById(id);

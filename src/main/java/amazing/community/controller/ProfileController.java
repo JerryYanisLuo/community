@@ -30,10 +30,10 @@ public class ProfileController {
             model.addAttribute("section", "question");
             model.addAttribute("sectionName", "我的提问");
         }
-        else if("reply".equals(action))
+        else if("subscribe".equals(action))
         {
-            model.addAttribute("section", "reply");
-            model.addAttribute("sectionName", "最新回复");
+            model.addAttribute("section", "subscribe");
+            model.addAttribute("sectionName", "我的关注");
         }
 
         User user = (User) request.getSession().getAttribute("user");

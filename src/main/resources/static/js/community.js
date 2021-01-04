@@ -55,6 +55,9 @@ function subReply(e)
     console.log("sub comment "+reply);
     par = main_comm_id;
     re = reply;
+
+    $("#sub_comment_content"+par).val("");
+    $("#sub_comment_content"+par).attr("placeholder","回复 @"+$("#sub_comm_name"+reply).val()+":");
 }
 
 function postSub()

@@ -41,23 +41,21 @@ public class LikeController {
             return ResultDTO.errorOf(CustomizeErrorCodeImpl.NO_LOGIN);
         }
 
-        String name = "like"+user.getId();
-        HashSet<String> like = (HashSet<String>) request.getSession().getAttribute(name);
-        if(like==null || !like.contains(likeDTO.getType()+"%"+likeDTO.getTargetId()))
-        {
+        if(likeDTO.getReceiverId()!=user.getId()) {
+            String name = "like" + user.getId();
+            HashSet<String> like = (HashSet<String>) request.getSession().getAttribute(name);
+            if (like == null || !like.contains(likeDTO.getType() + "%" + likeDTO.getTargetId())) {
 
-            if(like==null) like = new HashSet<>();
-            like.add(likeDTO.getType()+"%"+likeDTO.getTargetId());
-            request.getSession().setAttribute(name, like);
+                if (like == null) like = new HashSet<>();
+                like.add(likeDTO.getType() + "%" + likeDTO.getTargetId());
+                request.getSession().setAttribute(name, like);
 
-            if(likeDTO.getType()== LikeTypeEnum.COMMENT.getType())
-            {
-                commentService.updateLikeCount(likeDTO.getTargetId());
-            }
-            else if(likeDTO.getType()== LikeTypeEnum.QUESTION.getType())
-            {
-                questionService.updateLikeCount(likeDTO.getTargetId());
-                notificationService.notifyLike(user.getId(), likeDTO.getReceiverId(), likeDTO.getTargetId(), NotificationEnum.Like_Question.getType());
+                if (likeDTO.getType() == LikeTypeEnum.COMMENT.getType()) {
+                    commentService.updateLikeCount(likeDTO.getTargetId());
+                } else if (likeDTO.getType() == LikeTypeEnum.QUESTION.getType()) {
+                    questionService.updateLikeCount(likeDTO.getTargetId());
+                    notificationService.notifyLike(user.getId(), likeDTO.getReceiverId(), likeDTO.getTargetId(), NotificationEnum.Like_Question.getType());
+                }
             }
         }
 

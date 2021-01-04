@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @MapperScan("amazing.community.mapper")
 @SpringBootApplication
-public class CommunityApplication {
+public class CommunityApplication{
 
     public static void main(String[] args) {
         SpringApplication.run(CommunityApplication.class, args);
