@@ -30,6 +30,12 @@
                     <span class="badge" th:if="${commNum!=0}" th:text="${commNum}"></span>
                 </a>
 
+                <a href="/notification/likeQuest"
+                   th:class="${section=='likeQuest'}?'list-group-item active':'list-group-item'">
+                    点赞我的
+                    <span class="badge" th:if="${likeQuestNum!=0}" th:text="${likeQuestNum}"></span>
+                </a>
+
 
             </div>
         </div>
@@ -52,12 +58,21 @@
                                 <div class="media-body">
                                     <div>
                                         <b th:text="${message.notifier.name}"></b>
-                                        <span th:if="${section=='replyQuest'}"><span>评论了你的话题 ~ </span><span
-                                                th:text="${message.main_title}"></span></span>
+                                        <span th:if="${section=='replyQuest'}">
+                                            <span>评论了你的话题 ~ </span>
+                                            <span th:text="${message.main_title}"></span>
+                                        </span>
+
                                         <span th:if="${section=='replyComm'}"> @了我</span>
+
+                                        <span th:if="${section=='likeQuest'}">
+                                            <span>点赞了我的话题 ~ </span>
+                                            <span th:text="${message.main_title}"></span>
+                                        </span>
+
                                     </div>
                                     <div class="info">
-                                        <span th:text="${#dates.format(message.getGmt_create(), 'yyyy-MM-dd HH:MM')}"></span>&emsp;
+                                        <span th:text="${#dates.format(message.getGmt_create(), 'yyyy-MM-dd HH:mm')}"></span>&emsp;
                                     </div>
 
                                 </div>

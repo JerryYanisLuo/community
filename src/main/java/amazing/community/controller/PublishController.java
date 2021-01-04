@@ -54,7 +54,6 @@ public class PublishController {
 
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
-            System.out.println("用户未登录");
             model.addAttribute("error", "用户未登录");
             return "publish";
         }

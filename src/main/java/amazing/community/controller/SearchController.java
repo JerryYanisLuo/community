@@ -18,7 +18,7 @@ public class SearchController {
     public String search(Model model,
                          @RequestParam(name = "name", required = false) String name,
                          @RequestParam(name = "page", defaultValue = "1") Integer page,
-                         @RequestParam(name = "size", defaultValue = "5") Integer size) {
+                         @RequestParam(name = "size", defaultValue = "10") Integer size) {
 
         PaginationDTO pagination = questionService.search(name, page, size);
         model.addAttribute("pagination", pagination);

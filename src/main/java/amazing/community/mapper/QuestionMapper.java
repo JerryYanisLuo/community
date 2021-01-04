@@ -41,4 +41,10 @@ public interface QuestionMapper {
 
     @Select("select id from question where creator = #{id} order by gmt_create desc limit 0,1")
     Integer findLatestQuest(User user);
+
+    @Select("select * from question order by (comment_count+like_count+view_count) desc limit 0,10")
+    List<Question> hotList();
+
+    @Update("update question set like_count = like_count+1 where id = #{id}")
+    void updateLikeCount(@Param(value = "id") Integer targetId);
 }

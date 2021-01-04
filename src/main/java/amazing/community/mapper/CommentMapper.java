@@ -1,10 +1,7 @@
 package amazing.community.mapper;
 
 import amazing.community.model.Comment;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -22,4 +19,7 @@ public interface CommentMapper {
 
     @Select("select * from comment where parent_id=#{id} and type = 2 order by gmt_create desc")
     List<Comment> getCommentsByCommentId(@Param(value = "id") Integer id);
+
+    @Update("update comment set like_count = like_count+1 where id = #{id}")
+    void updateLikeCount(@Param(value = "id") Integer comm);
 }

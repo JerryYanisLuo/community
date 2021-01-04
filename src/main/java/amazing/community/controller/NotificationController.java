@@ -2,7 +2,7 @@ package amazing.community.controller;
 
 
 import amazing.community.dto.NotificationDTO;
-import amazing.community.enums.CommentTypeEnum;
+import amazing.community.enums.NotificationEnum;
 import amazing.community.enums.NotificationStatusEnum;
 import amazing.community.model.User;
 import amazing.community.service.NotificationService;
@@ -31,10 +31,12 @@ public class NotificationController {
             return "redirect:/";
         }
 
-        List<NotificationDTO> notifyQuest = notificationService.grabNotifications(user.getId(), CommentTypeEnum.QUESTION.getType(), NotificationStatusEnum.UNREAD.getStatus());
-        List<NotificationDTO> notifyComm = notificationService.grabNotifications(user.getId(), CommentTypeEnum.COMMENT.getType(), NotificationStatusEnum.UNREAD.getStatus());
+        List<NotificationDTO> notifyQuest = notificationService.grabNotifications(user.getId(), NotificationEnum.REPLY_QUESTION.getType(), NotificationStatusEnum.UNREAD.getStatus());
+        List<NotificationDTO> notifyComm = notificationService.grabNotifications(user.getId(), NotificationEnum.REPLY_COMMENT.getType(), NotificationStatusEnum.UNREAD.getStatus());
+        List<NotificationDTO> notifyLikeQuest = notificationService.grabNotifications(user.getId(), NotificationEnum.Like_Question.getType(), NotificationStatusEnum.UNREAD.getStatus());
         model.addAttribute("questNum",notifyQuest.size());
         model.addAttribute("commNum",notifyComm.size());
+        model.addAttribute("likeQuestNum",notifyLikeQuest.size());
 
         if ("replyQuest".equals(action)) {
             //评论了我的话题
@@ -46,6 +48,12 @@ public class NotificationController {
             model.addAttribute("section", "replyComm");
             model.addAttribute("sectionName", "@我的");
             model.addAttribute("reNotifications", notifyComm);
+        }
+        else if("likeQuest".equals(action))
+        {
+            model.addAttribute("section", "likeQuest");
+            model.addAttribute("sectionName", "点赞我的");
+            model.addAttribute("reNotifications", notifyLikeQuest);
         }
         return "notification";
     }

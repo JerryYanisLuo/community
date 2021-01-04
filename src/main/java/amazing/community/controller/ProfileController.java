@@ -23,7 +23,7 @@ public class ProfileController {
                           Model model,
                           HttpServletRequest request,
                           @RequestParam(name="page", defaultValue = "1") Integer page,
-                          @RequestParam(name="size", defaultValue = "5") Integer size)
+                          @RequestParam(name="size", defaultValue = "10") Integer size)
     {
         if("question".equals(action))
         {

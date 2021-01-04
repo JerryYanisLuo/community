@@ -146,4 +146,16 @@ public class QuestionService {
         return questionMapper.findLatestQuest(user);
 
     }
+
+    public List<Question> hotList() {
+
+        return questionMapper.hotList();
+
+    }
+
+    public void updateLikeCount(Integer targetId) {
+
+        questionMapper.updateLikeCount(targetId);
+
+    }
 }

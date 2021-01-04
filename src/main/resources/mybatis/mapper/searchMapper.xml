@@ -7,16 +7,19 @@
     <select id="searchQuestionByName" resultType="Question">
         select * from question
         <where>
-            <if test="name != null">
+            <if test="name != null and name!=''">
                 and title regexp #{name}
             </if>
         </where>
+
+        limit #{offset}, #{size}
+
     </select>
 
     <select id="count" resultType="int">
         select count(*) from question
         <where>
-            <if test="name != null">
+            <if test="name != null and name!=''">
                 and title regexp #{name}
             </if>
         </where>

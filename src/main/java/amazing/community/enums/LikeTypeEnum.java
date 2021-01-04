@@ -1,13 +1,13 @@
 package amazing.community.enums;
 
-public enum CommentTypeEnum {
+public enum LikeTypeEnum {
 
-    QUESTION(1),
-    COMMENT(2);
+    QUESTION(0),
+    COMMENT(1);
 
     private Integer type;
 
-    CommentTypeEnum(Integer type) {
+    LikeTypeEnum(Integer type) {
         this.type = type;
     }
 

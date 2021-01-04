@@ -100,3 +100,110 @@ function postSub()
     });
 }
 
+function like()
+{
+    var questionId = $("#question_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: "/like",
+        contentType:"application/json",
+        data: JSON.stringify({
+            "targetId": $("#comm_id").val(),
+            "type": 1,
+            "receiverId":$("#receiver_id").val()
+        }),
+        success: function (response){
+            if(response.code == 200)
+            {
+                //请求成功
+                window.location.reload();
+            }
+            else if(response.code == 2003)
+            {
+                //没有登录
+                if(confirm(response.message))
+                {
+                    window.close();
+                    window.open("https://github.com/login/oauth/authorize?client_id=332a3737971e29bdf5f1&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
+                    window.localStorage.setItem("question_id", questionId);
+                    window.localStorage.setItem("close", "true");
+                }
+            }
+        },
+        dataType: "json"
+    });
+}
+
+
+function sublike()
+{
+    var questionId = $("#question_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: "/like",
+        contentType:"application/json",
+        data: JSON.stringify({
+            "targetId": $("#sub_comm_id").val(),
+            "type": 1,
+            "receiverId":$("#sub_receiver_id").val()
+        }),
+        success: function (response){
+            if(response.code == 200)
+            {
+                //请求成功
+                window.location.reload();
+            }
+            else if(response.code == 2003)
+            {
+                //没有登录
+                if(confirm(response.message))
+                {
+                    window.close();
+                    window.open("https://github.com/login/oauth/authorize?client_id=332a3737971e29bdf5f1&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
+                    window.localStorage.setItem("question_id", questionId);
+                    window.localStorage.setItem("close", "true");
+                }
+            }
+        },
+        dataType: "json"
+    });
+}
+
+
+
+function likeQuest()
+{
+    var questionId = $("#question_id").val();
+
+    $.ajax({
+        type: "POST",
+        url: "/like",
+        contentType:"application/json",
+        data: JSON.stringify({
+            "targetId": questionId,
+            "type": 0,
+            "receiverId":$("#quest_poster_id").val()
+        }),
+        success: function (response){
+            if(response.code == 200)
+            {
+                //请求成功
+                window.location.reload();
+            }
+            else if(response.code == 2003)
+            {
+                //没有登录
+                if(confirm(response.message))
+                {
+                    window.close();
+                    window.open("https://github.com/login/oauth/authorize?client_id=332a3737971e29bdf5f1&redirect_uri=http://localhost:8887/callback&scope=user&state=1");
+                    window.localStorage.setItem("question_id", questionId);
+                    window.localStorage.setItem("close", "true");
+                }
+            }
+        },
+        dataType: "json"
+    });
+}

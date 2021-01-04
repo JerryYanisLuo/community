@@ -123,4 +123,10 @@ public class CommentService {
         }
         return comments;
     }
+
+    public void updateLikeCount(Integer comm) {
+
+        commentMapper.updateLikeCount(comm);
+
+    }
 }
